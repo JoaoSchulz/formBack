@@ -18,3 +18,29 @@ model User {
   createdAt DateTime @default(now())
   role      String   @default("user") // Add role field with default value
 }
+
+model Processo {
+  id                  Int      @id @default(autoincrement())
+  nomeProcesso        String
+  objeto              String
+  tipoContrato        String
+  etapaAtual          String
+  escolasImpactadas   Int
+  estudantesImpactados Int
+  valorTotal          Float
+  valorExecutado      Float
+  percentualExecucao  Float
+  dataOrdemServico    DateTime?
+  dataPrazoFinal      DateTime?
+  dataEmpenho         DateTime?
+  numeroEmpenho       String?
+  tempoRestante       String?
+  probabilidade       String?
+  impacto             String?
+  nivelRisco          String?
+  justificativaRisco  String?
+  userIp              String
+  userLocation        String
+  userDevice          String
+  dataRegistro        DateTime @default(now())
+}
