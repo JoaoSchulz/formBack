@@ -10,9 +10,12 @@ export class ProcessoRepositoryPrisma {
     await this.prisma.processo.create({
       data: {
         ...processo.props,
-        dataOrdemServico: processo.props.dataOrdemServico || undefined,
-        dataPrazoFinal: processo.props.dataPrazoFinal || undefined,
-        dataEmpenho: processo.props.dataEmpenho || undefined,
+        valorTotal: parseFloat(processo.props.valorTotal as unknown as string), // Converta para Float
+        valorExecutado: parseFloat(processo.props.valorExecutado as unknown as string), // Converta para Float
+        percentualExecucao: parseFloat(processo.props.percentualExecucao as unknown as string), // Converta para Float
+        dataOrdemServico: processo.props.dataOrdemServico ? new Date(processo.props.dataOrdemServico) : undefined,
+        dataPrazoFinal: processo.props.dataPrazoFinal ? new Date(processo.props.dataPrazoFinal) : undefined,
+        dataEmpenho: processo.props.dataEmpenho ? new Date(processo.props.dataEmpenho) : undefined,
         numeroEmpenho: processo.props.numeroEmpenho || undefined,
         tempoRestante: processo.props.tempoRestante || undefined,
         probabilidade: processo.props.probabilidade || undefined,

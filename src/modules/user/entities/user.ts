@@ -1,5 +1,3 @@
-import { randomUUID } from 'crypto';
-
 interface UserSchema {
   email: string;
   password: string;

@@ -16,6 +16,8 @@ import { ProcessoRepositoryPrisma } from './modules/processo/repositories/Proces
     AuthenticateUserUseCase,
     CreateProcessoUseCase,
     ListProcessosUseCase,
+    UserRepositoryPrisma,
+    ProcessoRepositoryPrisma, 
     {
       provide: 'UserRepository',
       useClass: UserRepositoryPrisma,

@@ -37,6 +37,14 @@ export class AuthenticateUserUseCase {
       { expiresIn: '1h' } // Token expira em 1 hora
     );
 
-    return { access_token: accessToken, role: user.role }; // Retorne o campo role
+    return { 
+      access_token: accessToken, 
+      user: { // Inclua os dados do usuário na resposta
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      } 
+    };
   }
 }

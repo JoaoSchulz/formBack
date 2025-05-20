@@ -27,8 +27,7 @@ export class UserController {
   @Post('login')
   async login(@Body() body: LoginBody) {
     const result = await this.authenticateUserUseCase.execute(body);
-    // Redirect logic can be handled in the frontend based on the role
-    return result;
+    return result; // Retorne o payload completo com o usuário e o token
   }
 
   @Get()

@@ -17,6 +17,6 @@ export class ProcessoController {
 
   @Get()
   async list() {
-    return this.listProcessosUseCase.execute();
+    return this.listProcessosUseCase.execute(); // Retorna todos os processos
   }
 }
