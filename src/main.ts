@@ -3,12 +3,22 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
-  // Habilitar CORS
+
+  const allowedOrigins = [
+    'http://localhost:3000', // Para desenvolvimento local
+    'https://formulario-front-five.vercel.app', // Domínio do frontend no Vercel
+  ];
+
   app.enableCors({
-    origin: 'http://localhost:3000', // ou '*' para permitir qualquer origem
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    credentials: true, // Permitir cookies ou autenticação
   });
 
   await app.listen(8080);
