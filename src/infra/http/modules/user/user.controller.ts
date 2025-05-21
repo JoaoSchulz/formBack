@@ -26,7 +26,9 @@ export class UserController {
 
   @Post('login')
   async login(@Body() body: LoginBody) {
+    console.log('Login request received:', body); // Log para verificar se a requisição chegou
     const result = await this.authenticateUserUseCase.execute(body);
+    console.log('Login response:', result); // Log para verificar a resposta
     return result; // Retorne o payload completo com o usuário e o token
   }
 

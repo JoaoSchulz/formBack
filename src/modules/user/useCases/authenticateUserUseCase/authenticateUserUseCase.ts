@@ -24,11 +24,6 @@ export class AuthenticateUserUseCase {
         throw new UnauthorizedException('Invalid credentials');
       }
 
-      if (!user.role) {
-        console.error('User role is missing for:', email); // Log de erro
-        throw new UnauthorizedException('User role is missing');
-      }
-
       const passwordMatch = await compare(password, user.password);
       if (!passwordMatch) {
         console.error('Password mismatch for user:', email); // Log de erro
