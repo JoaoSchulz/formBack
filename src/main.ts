@@ -6,7 +6,8 @@ async function bootstrap() {
 
   const allowedOrigins = [
     'http://localhost:3000', // Para desenvolvimento local
-    'https://formulario-front-five.vercel.app', // Domínio do frontend no Vercel
+    'https://formulario-front-five.vercel.app', // Origem anterior
+    'https://formulario-front-9qxdayrt7-joao-schulzs-projects.vercel.app', // Nova origem
   ];
 
   app.enableCors({
