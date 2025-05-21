@@ -31,6 +31,10 @@ export class CreateProcessoUseCase {
   constructor(private processoRepository: ProcessoRepositoryPrisma) {}
 
   async execute(data: CreateProcessoRequest): Promise<void> {
+    if (!data.nomeProcesso) {
+      throw new Error('O campo "nomeProcesso" é obrigatório.');
+    }
+
     const processo = new Processo({
       ...data,
       dataRegistro: new Date(),
