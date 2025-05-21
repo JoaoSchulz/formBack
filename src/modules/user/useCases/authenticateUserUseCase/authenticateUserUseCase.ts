@@ -16,8 +16,10 @@ export class AuthenticateUserUseCase {
   ) {}
 
   async execute({ email, password }: AuthenticateUserRequest) {
+    console.log('Authenticating user:', email); // Log para depuração
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
+      console.error('User not found:', email); // Log de erro
       throw new UnauthorizedException('Invalid credentials');
     }
 
@@ -27,6 +29,7 @@ export class AuthenticateUserUseCase {
 
     const passwordMatch = await compare(password, user.password);
     if (!passwordMatch) {
+      console.error('Password mismatch for user:', email); // Log de erro
       throw new UnauthorizedException('Invalid credentials');
     }
 

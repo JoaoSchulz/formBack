@@ -11,10 +11,11 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      console.log('Origin:', origin); // Adicione este log para depuração
+      console.log('Origin:', origin); // Log para depuração
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
+        console.error('Blocked by CORS:', origin); // Log de erro
         callback(new Error('Not allowed by CORS'));
       }
     },
