@@ -20,16 +20,26 @@ export class UserRepositoryPrisma implements UserRepository {
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
-    const user = await this.prisma.user.findUnique({ where: { email } });
-    if (!user) return undefined;
-    return new User({
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      password: user.password,
-      createdAt: user.createdAt,
-      role: user.role as 'admin' | 'user',
-    });
+    try {
+      console.log('Finding user by email:', email); // Log para depuração
+      const user = await this.prisma.user.findUnique({ where: { email } });
+      if (!user) {
+        console.error('User not found in database:', email); // Log de erro
+        return undefined;
+      }
+      console.log('User found:', user); // Log de sucesso
+      return new User({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        password: user.password,
+        createdAt: user.createdAt,
+        role: user.role as 'admin' | 'user',
+      });
+    } catch (error) {
+      console.error('Error finding user by email:', error); // Log detalhado do erro
+      throw error;
+    }
   }
 
   async findAll(): Promise<User[]> {

@@ -16,38 +16,44 @@ export class AuthenticateUserUseCase {
   ) {}
 
   async execute({ email, password }: AuthenticateUserRequest) {
-    console.log('Authenticating user:', email); // Log para depuração
-    const user = await this.userRepository.findByEmail(email);
-    if (!user) {
-      console.error('User not found:', email); // Log de erro
-      throw new UnauthorizedException('Invalid credentials');
+    try {
+      console.log('Authenticating user:', email); // Log para depuração
+      const user = await this.userRepository.findByEmail(email);
+      if (!user) {
+        console.error('User not found:', email); // Log de erro
+        throw new UnauthorizedException('Invalid credentials');
+      }
+
+      if (!user.role) {
+        console.error('User role is missing for:', email); // Log de erro
+        throw new UnauthorizedException('User role is missing');
+      }
+
+      const passwordMatch = await compare(password, user.password);
+      if (!passwordMatch) {
+        console.error('Password mismatch for user:', email); // Log de erro
+        throw new UnauthorizedException('Invalid credentials');
+      }
+
+      const accessToken = jwt.sign(
+        { userId: user.id, email: user.email, role: user.role },
+        process.env.JWT_SECRET || 'uma-chave-secreta-segura',
+        { expiresIn: '1h' }
+      );
+
+      console.log('User authenticated successfully:', email); // Log de sucesso
+      return { 
+        access_token: accessToken, 
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+        } 
+      };
+    } catch (error) {
+      console.error('Error during authentication:', error); // Log detalhado do erro
+      throw error;
     }
-
-    if (!user.role) {
-      throw new UnauthorizedException('User role is missing'); // Adicione uma verificação para o campo role
-    }
-
-    const passwordMatch = await compare(password, user.password);
-    if (!passwordMatch) {
-      console.error('Password mismatch for user:', email); // Log de erro
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    // Gerar o token JWT
-    const accessToken = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role }, // Inclua o campo role no payload
-      'your-secret-key', // Substitua por uma chave secreta segura
-      { expiresIn: '1h' } // Token expira em 1 hora
-    );
-
-    return { 
-      access_token: accessToken, 
-      user: { // Inclua os dados do usuário na resposta
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-      } 
-    };
   }
 }

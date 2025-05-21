@@ -11,7 +11,6 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      console.log('Origin:', origin); // Log para depuração
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -19,8 +18,9 @@ async function bootstrap() {
         callback(new Error('Not allowed by CORS'));
       }
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Inclua o método OPTIONS
     credentials: true, // Permitir cookies ou autenticação
+    allowedHeaders: ['Content-Type', 'Authorization'], // Permitir cabeçalhos necessários
   });
 
   await app.listen(8080);
