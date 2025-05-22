@@ -2,5 +2,5 @@ export class UserBody {
   email: string;
   name: string;
   password: string;
-  role?: 'admin' | 'user';
+  role: 'admin' | 'user';
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { User } from '../entities/user';
 import { UserRepository } from './UserRepository';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserRepositoryPrisma implements UserRepository {
@@ -55,5 +56,13 @@ export class UserRepositoryPrisma implements UserRepository {
           role: user.role as 'admin' | 'user', 
         }),
     );
+  }
+
+  async updateUser(id: number, data: Partial<User>): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data,
+    });
+    console.log(`User updated with ID: ${id}`); // Log de sucesso
   }
 }
