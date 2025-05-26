@@ -43,12 +43,12 @@ export class UserController {
   @Put(':id')
   async updateUser(@Param('id') id: number, @Body() body: Partial<UserBody>) {
     try {
-      console.log('Update request received for user ID:', id, 'with data:', body); // Log request details
+      console.log('Update request received for user ID:', id, 'with data:', body);
       await this.userRepository.updateUser(id, body);
-      console.log('User updated successfully for ID:', id); // Log success
+      console.log('User updated successfully for ID:', id);
       return { message: 'User updated successfully' };
     } catch (error) {
-      console.error('Error updating user:', error.message); // Log detalhado do erro
+      console.error('Error updating user:', error.message);
       throw new Error('Failed to update user');
     }
   }
