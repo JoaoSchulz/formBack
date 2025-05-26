@@ -70,7 +70,7 @@ export class UserRepositoryPrisma implements UserRepository {
           data: { ...data, password: hashedPassword }, // Garante que a senha seja criptografada
         });
         console.log(`Password updated successfully for user ID: ${id}`);
-      } else {
+      } else { //
         await this.prisma.user.update({
           where: { id },
           data,
