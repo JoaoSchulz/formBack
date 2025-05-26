@@ -34,16 +34,19 @@ export class UserController {
 
   @Get()
   async findAll() {
-    return this.userRepository.findAll();
+    console.log('Fetching all users'); // Log para depuração
+    const users = await this.userRepository.findAll();
+    console.log('Users fetched:', users); // Log de sucesso
+    return users;
   }
 
-@Put(':id')
-async updateUser(@Param('id') id: number, @Body() body: Partial<UserBody>) {
-  console.log('Update request received for user ID:', id, 'with data:', body); // Log request details
-  await this.userRepository.updateUser(id, body);
-  console.log('User updated successfully for ID:', id); // Log success
-  return { message: 'User updated successfully' };
-}
+  @Put(':id')
+  async updateUser(@Param('id') id: number, @Body() body: Partial<UserBody>) {
+    console.log('Update request received for user ID:', id, 'with data:', body); // Log request details
+    await this.userRepository.updateUser(id, body);
+    console.log('User updated successfully for ID:', id); // Log success
+    return { message: 'User updated successfully' };
+  }
 
   @Delete(':id')
   async deleteUser(@Param('id') id: number) {
