@@ -56,17 +56,26 @@ export class UserRepositoryPrisma implements UserRepository {
 
   async updateUser(id: number, data: Partial<User>): Promise<void> {
     try {
+      console.log(`Updating user with ID: ${id} and data:`, data); // Log para depuração
+
+      // Verifica se o usuário existe
       const user = await this.prisma.user.findUnique({ where: { id } });
       if (!user) throw new Error(`User with ID ${id} not found`);
+
+      // Se a senha estiver presente, criptografa antes de atualizar
+      if (data.password) {
+        data.password = await hash(data.password, 10);
+      }
 
       await this.prisma.user.update({
         where: { id },
         data,
       });
-      console.log(`User updated successfully with ID: ${id}`);
+
+      console.log(`User updated successfully with ID: ${id}`); // Log de sucesso
     } catch (error) {
-      console.error('Error updating user in database:', error);
-      throw error;
+      console.error('Error updating user in database:', error.message); // Log detalhado do erro
+      throw new Error('Failed to update user');
     }
   }
 

@@ -48,8 +48,27 @@ export class UserController {
       console.log('User updated successfully for ID:', id); // Log success
       return { message: 'User updated successfully' };
     } catch (error) {
-      console.error('Error updating user:', error); // Log detailed error
+      console.error('Error updating user:', error); // Log detalhado do erro
       throw error;
+    }
+  }
+
+  @Put(':id/password')
+  async updatePassword(@Param('id') id: number, @Body('password') password: string) {
+    try {
+      console.log(`Password update request received for user ID: ${id}`); // Log para depuração
+
+      if (!password) {
+        throw new Error('Password is required');
+      }
+
+      await this.userRepository.updateUser(id, { password });
+      console.log(`Password updated successfully for user ID: ${id}`); // Log de sucesso
+
+      return { message: 'Password updated successfully' };
+    } catch (error) {
+      console.error('Error updating password:', error.message); // Log detalhado do erro
+      throw new Error('Failed to update password');
     }
   }
 
