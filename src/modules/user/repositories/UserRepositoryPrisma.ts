@@ -65,4 +65,11 @@ export class UserRepositoryPrisma implements UserRepository {
     });
     console.log(`User updated with ID: ${id}`); // Log de sucesso
   }
+
+  async deleteUser(id: number): Promise<void> {
+    await this.prisma.user.delete({
+      where: { id },
+    });
+    console.log(`User deleted with ID: ${id}`); // Log de sucesso
+  }
 }

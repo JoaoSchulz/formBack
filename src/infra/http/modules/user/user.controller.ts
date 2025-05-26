@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Put, Param, Inject } from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Param, Delete, Inject } from '@nestjs/common';
 import { CreateUserUseCase } from 'src/modules/user/useCases/createUserUseCase/createUserUseCase';
 import { AuthenticateUserUseCase } from 'src/modules/user/useCases/authenticateUserUseCase/authenticateUserUseCase';
 import { UserBody } from './dtos/userBody';
@@ -37,10 +37,15 @@ export class UserController {
     return this.userRepository.findAll();
   }
 
-
   @Put(':id')
   async updateUser(@Param('id') id: number, @Body() body: Partial<UserBody>) {
     await this.userRepository.updateUser(id, body);
     return { message: 'User updated successfully' };
+  }
+
+  @Delete(':id')
+  async deleteUser(@Param('id') id: number) {
+    await this.userRepository.deleteUser(id);
+    return { message: 'User deleted successfully' };
   }
 }
