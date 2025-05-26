@@ -15,20 +15,16 @@ export class UserRepositoryPrisma implements UserRepository {
         name: user.name,
         password: user.password,
         createdAt: user.createdAt,
-        role: user.role as 'admin' | 'user', // Certifique-se de que o campo role está incluído
+        role: user.role as 'admin' | 'user',
       },
     });
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
     try {
-      console.log('Finding user by email:', email); // Log para depuração
       const user = await this.prisma.user.findUnique({ where: { email } });
-      if (!user) {
-        console.error('User not found in database:', email); // Log de erro
-        return undefined;
-      }
-      console.log('User found:', user); // Log de sucesso
+      if (!user) return undefined;
+
       return new User({
         id: user.id,
         email: user.email,
@@ -38,7 +34,7 @@ export class UserRepositoryPrisma implements UserRepository {
         role: user.role as 'admin' | 'user',
       });
     } catch (error) {
-      console.error('Error finding user by email:', error); // Log detalhado do erro
+      console.error('Error finding user by email:', error);
       throw error;
     }
   }
@@ -53,23 +49,58 @@ export class UserRepositoryPrisma implements UserRepository {
           name: user.name,
           password: user.password,
           createdAt: user.createdAt,
-          role: user.role as 'admin' | 'user', 
+          role: user.role as 'admin' | 'user',
         }),
     );
   }
 
   async updateUser(id: number, data: Partial<User>): Promise<void> {
-    await this.prisma.user.update({
-      where: { id },
-      data,
-    });
-    console.log(`User updated with ID: ${id}`); // Log de sucesso
+    try {
+      const user = await this.prisma.user.findUnique({ where: { id } });
+      if (!user) throw new Error(`User with ID ${id} not found`);
+
+      await this.prisma.user.update({
+        where: { id },
+        data,
+      });
+      console.log(`User updated successfully with ID: ${id}`);
+    } catch (error) {
+      console.error('Error updating user in database:', error);
+      throw error;
+    }
   }
 
   async deleteUser(id: number): Promise<void> {
-    await this.prisma.user.delete({
-      where: { id },
-    });
-    console.log(`User deleted with ID: ${id}`); // Log de sucesso
+    try {
+      const user = await this.prisma.user.findUnique({ where: { id } });
+      if (!user) throw new Error(`User with ID ${id} not found`);
+
+      await this.prisma.user.delete({
+        where: { id },
+      });
+      console.log(`User deleted successfully with ID: ${id}`);
+    } catch (error) {
+      console.error('Error deleting user in database:', error);
+      throw error;
+    }
+  }
+
+  async findById(id: number): Promise<User | null> {
+    try {
+      const user = await this.prisma.user.findUnique({ where: { id } });
+      if (!user) return null;
+
+      return new User({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        password: user.password,
+        createdAt: user.createdAt,
+        role: user.role as 'admin' | 'user',
+      });
+    } catch (error) {
+      console.error('Error finding user by ID:', error);
+      throw error;
+    }
   }
 }
