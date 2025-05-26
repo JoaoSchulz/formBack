@@ -57,7 +57,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: number) {
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
     await this.userRepository.deleteUser(id);
     return { message: 'User deleted successfully' };
   }
